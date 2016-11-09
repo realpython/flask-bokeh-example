@@ -1,8 +1,0 @@
-#!/Users/michael.herman/repos/realpython/flask-bokeh-example/env/bin/python3.5
-
-print("""
-The 'bokeh-server' command from versions 0.10 and earlier no longer exists.
-Please see the documentation for the new 'bokeh' command here:
-
-  http://bokeh.pydata.org/en/latest/docs/user_guide/cli.html
-""")
