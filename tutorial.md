@@ -5,21 +5,20 @@
 Create a new Flask project:
 
 ```sh
-$ mkdir flask-bokeh-sample
-$ cd flask-bokeh-example
+$ mkdir flask-bokeh-sample && cd flask-bokeh-example
 ```
 
 Create and activate a new virtual environment:
 
 ```sh
-$ python3.6 -m venv env
+$ python3 -m venv env
 $ source env/bin/activate
 ```
 
 Install Flask:
 
 ```sh
-$ pip install flask==0.12.0
+$ pip install flask==0.12.2
 ```
 
 Add an *app.py* file:
@@ -47,7 +46,7 @@ Run the server. Navigate to [http://localhost:5000/](http://localhost:5000/) in 
 Install:
 
 ```sh
-$ pip install bokeh==0.12.4
+$ pip install bokeh==0.12.6
 ```
 
 Add the imports:
@@ -65,15 +64,16 @@ Add a new route handler:
 @app.route('/bokeh')
 def bokeh():
 
-    # chart defaults
-    color = '#FF0000'
-    start = 0
-    finish = 10
-
-    # Create a polynomial line graph with those arguments
-    x = list(range(start, finish + 1))
-    fig = figure(title='Polynomial')
-    fig.line(x, [i ** 2 for i in x], color=color, line_width=2)
+    # init a basic bar chart:
+    # http://bokeh.pydata.org/en/latest/docs/user_guide/plotting.html#bars
+    fig = figure(plot_width=600, plot_height=600)
+    fig.vbar(
+        x=[1, 2, 3, 4],
+        width=0.5,
+        bottom=0,
+        top=[1.7, 2.2, 4.6, 3.9],
+        color='navy'
+    )
 
     # grab the static resources
     js_resources = INLINE.render_js()
@@ -94,11 +94,12 @@ def bokeh():
 Add a "templates" folder to the project root, and then add an *index.html* file to that folder:
 
 ```html
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Bokeh Sample</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Embed Demo</title>
     {{ js_resources|indent(4)|safe }}
     {{ css_resources|indent(4)|safe }}
     {{ plot_script|indent(4)|safe }}

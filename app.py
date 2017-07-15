@@ -1,59 +1,48 @@
-import flask
+from flask import Flask, render_template
 
 from bokeh.embed import components
 from bokeh.plotting import figure
 from bokeh.resources import INLINE
 from bokeh.util.string import encode_utf8
 
-app = flask.Flask(__name__)
 
-colors = {
-    'Black': '#000000',
-    'Red':   '#FF0000',
-    'Green': '#00FF00',
-    'Blue':  '#0000FF',
-}
+app = Flask(__name__)
 
-def getitem(obj, item, default):
-    if item not in obj:
-        return default
-    else:
-        return obj[item]
 
-@app.route("/")
-def polynomial():
-    """ Very simple embedding of a polynomial chart
-    """
+@app.route('/')
+def index():
+    return 'Hello, World!'
 
-    # Grab the inputs arguments from the URL
-    args = flask.request.args
 
-    # Get all the form arguments in the url with defaults
-    color = colors[getitem(args, 'color', 'Black')]
-    _from = int(getitem(args, '_from', 0))
-    to = int(getitem(args, 'to', 10))
+@app.route('/bokeh')
+def bokeh():
 
-    # Create a polynomial line graph with those arguments
-    x = list(range(_from, to + 1))
-    fig = figure(title="Polynomial")
-    fig.line(x, [i ** 2 for i in x], color=color, line_width=2)
+    # init a basic bar chart:
+    # http://bokeh.pydata.org/en/latest/docs/user_guide/plotting.html#bars
+    fig = figure(plot_width=600, plot_height=600)
+    fig.vbar(
+        x=[1, 2, 3, 4],
+        width=0.5,
+        bottom=0,
+        top=[1.7, 2.2, 4.6, 3.9],
+        color='navy'
+    )
 
+    # grab the static resources
     js_resources = INLINE.render_js()
     css_resources = INLINE.render_css()
 
+    # render template
     script, div = components(fig)
-    html = flask.render_template(
+    html = render_template(
         'index.html',
         plot_script=script,
         plot_div=div,
         js_resources=js_resources,
         css_resources=css_resources,
-        color=color,
-        _from=_from,
-        to=to
     )
     return encode_utf8(html)
 
-if __name__ == "__main__":
-    print(__doc__)
-    app.run()
+
+if __name__ == '__main__':
+    app.run(debug=True)
