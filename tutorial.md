@@ -5,7 +5,7 @@
 Create a new Flask project:
 
 ```sh
-$ mkdir flask-bokeh-sample && cd flask-bokeh-example
+$ mkdir flask-bokeh-example && cd flask-bokeh-example
 ```
 
 Create and activate a new virtual environment:
